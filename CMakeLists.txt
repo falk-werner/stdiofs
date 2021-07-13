@@ -14,7 +14,8 @@ add_library(stdiofs STATIC
     src/fs/stub.c
     src/passthroughfs.c
     src/rpc/rpc.c
-    src/rpc/buffer.c)
+    src/rpc/buffer.c
+    src/rpc/serializer.c)
 
 target_include_directories(stdiofs PRIVATE src)
 target_link_libraries(stdiofs PUBLIC PkgConfig::FUSE)
@@ -31,7 +32,8 @@ pkg_check_modules(GTEST REQUIRED IMPORTED_TARGET gtest_main)
 
 
 add_executable(alltests
-    test/rpc/buffer.cpp)
+    test/rpc/buffer.cpp
+    test/rpc/serializer.cpp)
 
 target_include_directories(alltests PRIVATE src test)
 target_link_libraries(alltests PRIVATE stdiofs PkgConfig::GTEST)

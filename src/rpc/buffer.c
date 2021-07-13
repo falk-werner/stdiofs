@@ -16,10 +16,10 @@ rpc_buffer_reserve(
     struct rpc_buffer * buffer,
     size_t needed)
 {
-    if (needed >= buffer->capacity)
+    if (needed > buffer->capacity)
     {
         size_t new_capacity = buffer->capacity * 2;
-        while (needed < new_capacity)
+        while (needed > new_capacity)
         {
             new_capacity *= 2;
         }
@@ -67,7 +67,7 @@ rpc_buffer_size(
 void
 rpc_buffer_write(
     struct rpc_buffer * buffer,
-    char * data,
+    char const * data,
     size_t count)
 {
     size_t const needed = (buffer->size + count);
@@ -85,7 +85,7 @@ rpc_buffer_write_at(
 {
     size_t const needed = (offset + count);
     rpc_buffer_reserve(buffer, needed);
-    memcpy(&buffer->data[buffer->size], data, count);
+    memcpy(&buffer->data[offset], data, count);
 }
 
 

@@ -39,7 +39,7 @@ rpc_buffer_size(
 extern void
 rpc_buffer_write(
     struct rpc_buffer * buffer,
-    char * data,
+    char const * data,
     size_t count);
 
 extern void
