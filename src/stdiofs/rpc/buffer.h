@@ -54,6 +54,11 @@ rpc_buffer_skip(
     struct rpc_buffer * buffer,
     size_t count);
 
+extern char *
+rpc_buffer_read(
+    struct rpc_buffer * buffer,
+    char * data,
+    size_t count);
 
 #ifdef __cplusplus
 }

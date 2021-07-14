@@ -33,3 +33,37 @@ rpc_serialize_int(
     
     return 0;
 }
+
+int
+rpc_deserialize_raw_int(
+    struct rpc_buffer * buffer,
+    int * value)
+{
+    int result = -1;
+
+    char * data = rpc_buffer_read(buffer, data, RPC_INT_SIZE);
+    if (NULL != data)
+    {
+        unsigned int val = 0;
+        for(size_t i = 0; i < RPC_INT_SIZE; i++)
+        {
+            val <<= 8;
+            val |= ((unsigned int) data[i]) & 0xff;
+        }
+
+        int * p = (int*) &val;
+        *value = *p;
+        result = 0;
+    }
+
+    return result;
+}
+
+extern int
+rpc_deserialize_int(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const *arg)
+{
+    return rpc_deserialize_raw_int(buffer, arg->value);
+}
+

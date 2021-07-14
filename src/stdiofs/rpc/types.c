@@ -14,6 +14,18 @@ rpc_serialize_unknown(
     return -1;
 }
 
+static int
+rpc_deserialize_unknown(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg)
+{
+    (void) buffer;
+    (void) arg;
+
+    return -1;
+}
+
+
 rpc_serialize_fn *
 rpc_get_serializer(int type_id)
 {
@@ -29,5 +41,17 @@ rpc_get_serializer(int type_id)
             return &rpc_serialize_u64;
         default:
             return &rpc_serialize_unknown;
+    }
+}
+
+rpc_deserialize_fn *
+rpc_get_deserializer(int type_id)
+{
+    switch (type_id)
+    {
+        case RPC_INT:
+            return &rpc_deserialize_int;
+        default:
+            return &rpc_deserialize_unknown;
     }
 }

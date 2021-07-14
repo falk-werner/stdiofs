@@ -98,3 +98,21 @@ rpc_buffer_skip(
     rpc_buffer_reserve(buffer, needed);
     buffer->size += count;
 }
+
+char *
+rpc_buffer_read(
+    struct rpc_buffer * buffer,
+    char * data,
+    size_t count)
+{
+    char * result = NULL;
+    
+    size_t const needed = buffer->size + count;
+    if (buffer->capacity >= needed)
+    {
+        result = &buffer->data[buffer->size];
+        buffer->size += count;
+    }
+
+    return result;
+}

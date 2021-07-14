@@ -338,8 +338,8 @@ fs_proxy_chown(
     struct rpc_arg const args[] =
     {
         {"path"  , RPC_IN , RPC_STRING, (void*) path, NULL},
-        {"uid "  , RPC_IN , RPC_INT   , &uid        , NULL},
-        {"gid "  , RPC_IN , RPC_INT   , &gid        , NULL},
+        {"uid "  , RPC_IN , RPC_UID   , &uid        , NULL},
+        {"gid "  , RPC_IN , RPC_GID   , &gid        , NULL},
         {"result", RPC_OUT, RPC_INT   , &result     , NULL},
         {NULL    , RPC_END, RPC_NONE  , NULL        , NULL}
     };
