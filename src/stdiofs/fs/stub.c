@@ -1,4 +1,4 @@
-#include "fs/stub_intern.h"
+#include "stdiofs/fs/stub_intern.h"
 
 #include <stdlib.h>
 #include <string.h>

@@ -1,11 +1,11 @@
 #define FUSE_USE_VERSION 31
 #define _GNU_SOURCE
 
-#include "passthroughfs.h"
-#include "proxyfs.h"
-#include "fs/stub.h"
-#include "fs/proxy.h"
-#include "rpc/rpc.h"
+#include "stdiofs/passthroughfs.h"
+#include "stdiofs/proxyfs.h"
+#include "stdiofs/fs/stub.h"
+#include "stdiofs/fs/proxy.h"
+#include "stdiofs/rpc/rpc.h"
 
 #include <fuse.h>
 

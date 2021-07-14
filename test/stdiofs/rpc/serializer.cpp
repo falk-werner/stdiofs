@@ -1,6 +1,7 @@
-#include "rpc/serializer.h"
-#include "rpc/buffer.h"
-#include "rpc/arg.h"
+#include "stdiofs/rpc/serializer.h"
+#include "stdiofs/rpc/buffer.h"
+#include "stdiofs/rpc/arg.h"
+#include "stdiofs/rpc/types.h"
 
 #include <gtest/gtest.h>
 

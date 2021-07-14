@@ -1,8 +1,8 @@
 #ifndef FS_STUB_INTERN_H
 #define FS_STUB_INTERN_H
 
-#include "fs/stub.h"
-#include "fs/operations.h"
+#include "stdiofs/fs/stub.h"
+#include "stdiofs/fs/operations.h"
 
 #ifdef __cplusplus
 extern "C"

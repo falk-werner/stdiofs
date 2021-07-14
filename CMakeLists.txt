@@ -9,13 +9,19 @@ pkg_check_modules(FUSE REQUIRED IMPORTED_TARGET fuse3)
 set(CMAKE_C_STANDARD 99)
 
 add_library(stdiofs STATIC
-    src/proxyfs.c
-    src/fs/proxy.c
-    src/fs/stub.c
-    src/passthroughfs.c
-    src/rpc/rpc.c
-    src/rpc/buffer.c
-    src/rpc/serializer.c)
+    src/stdiofs/proxyfs.c
+    src/stdiofs/fs/proxy.c
+    src/stdiofs/fs/stub.c
+    src/stdiofs/passthroughfs.c
+    src/stdiofs/rpc/rpc.c
+    src/stdiofs/rpc/buffer.c
+    src/stdiofs/rpc/serializer.c
+    src/stdiofs/rpc/types.c
+    src/stdiofs/rpc/type/int.c
+    src/stdiofs/rpc/type/string.c
+    src/stdiofs/rpc/type/size.c
+    src/stdiofs/rpc/type/u64.c
+)
 
 target_include_directories(stdiofs PRIVATE src)
 target_link_libraries(stdiofs PUBLIC PkgConfig::FUSE)
@@ -32,8 +38,10 @@ pkg_check_modules(GTEST REQUIRED IMPORTED_TARGET gtest_main)
 
 
 add_executable(alltests
-    test/rpc/buffer.cpp
-    test/rpc/serializer.cpp)
+    test/stdiofs/rpc/buffer.cpp
+    test/stdiofs/rpc/serializer.cpp
+    test/stdiofs/rpc/type/int.cpp
+)
 
 target_include_directories(alltests PRIVATE src test)
 target_link_libraries(alltests PRIVATE stdiofs PkgConfig::GTEST)

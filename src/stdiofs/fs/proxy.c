@@ -1,8 +1,9 @@
-#include "fs/proxy.h"
+#include "stdiofs/fs/proxy.h"
 
-#include "rpc/rpc.h"
-#include "rpc/arg.h"
-#include "rpc/methods.h"
+#include "stdiofs/rpc/rpc.h"
+#include "stdiofs/rpc/arg.h"
+#include "stdiofs/rpc/types.h"
+#include "stdiofs/rpc/methods.h"
 
 #include <stdlib.h>
 

@@ -1,7 +1,7 @@
 #ifndef FS_PROXY_H
 #define FS_PROXY_H
 
-#include "fs/dirbuffer.h"
+#include "stdiofs/fs/dirbuffer.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>

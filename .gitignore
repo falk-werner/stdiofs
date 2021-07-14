@@ -1,1 +1,5 @@
 /build/
+/.vscode/
+/src/demo/
+/src/fuse_examples/
+/src/old/

@@ -1,8 +1,8 @@
 #define FUSE_USE_VERSION 31
 
-#include "proxyfs.h"
-#include "fs/proxy.h"
-#include "fs/operations.h"
+#include "stdiofs/proxyfs.h"
+#include "stdiofs/fs/proxy.h"
+#include "stdiofs/fs/operations.h"
 
 #include <fuse.h>
 

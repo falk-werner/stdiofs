@@ -1,7 +1,7 @@
 #define _GNU_SOURCE
 
-#include "passthroughfs.h"
-#include "fs/operations.h"
+#include "stdiofs/passthroughfs.h"
+#include "stdiofs/fs/operations.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>

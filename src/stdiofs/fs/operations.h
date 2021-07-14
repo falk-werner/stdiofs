@@ -1,7 +1,7 @@
 #ifndef FS_OPERATIONS_H
 #define FS_OPERATIONS_H
 
-#include "fs/dirbuffer.h"
+#include "stdiofs/fs/dirbuffer.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>

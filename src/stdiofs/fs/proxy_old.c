@@ -1,5 +1,5 @@
-#include "fs/proxy.h"
-#include "fs/stub_intern.h"
+#include "stdiofs/fs/proxy.h"
+#include "stdiofs/fs/stub_intern.h"
 
 #include <stdlib.h>
 

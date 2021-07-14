@@ -1,4 +1,4 @@
-#include "rpc/rpc.h"
+#include "stdiofs/rpc/rpc.h"
 #include <stdlib.h>
 
 struct rpc
