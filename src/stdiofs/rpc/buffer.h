@@ -60,6 +60,12 @@ rpc_buffer_read(
     char * data,
     size_t count);
 
+extern void
+rpc_buffer_reserve(
+    struct rpc_buffer * buffer,
+    size_t needed);
+
+
 #ifdef __cplusplus
 }
 #endif

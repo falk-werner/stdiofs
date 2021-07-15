@@ -17,6 +17,7 @@ add_library(stdiofs STATIC
     src/stdiofs/rpc/buffer.c
     src/stdiofs/rpc/serializer.c
     src/stdiofs/rpc/deserializer.c
+    src/stdiofs/rpc/connection.c
     src/stdiofs/rpc/types.c
     src/stdiofs/rpc/type/int.c
     src/stdiofs/rpc/type/string.c
@@ -40,6 +41,7 @@ pkg_check_modules(GTEST REQUIRED IMPORTED_TARGET gtest_main)
 
 add_executable(alltests
     test/stdiofs/rpc/buffer.cpp
+    test/stdiofs/rpc/connection.cpp
     test/stdiofs/rpc/serializer.cpp
     test/stdiofs/rpc/deserializer.cpp
     test/stdiofs/rpc/type/unknown.cpp

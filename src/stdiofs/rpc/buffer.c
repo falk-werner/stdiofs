@@ -11,7 +11,7 @@ static size_t rpc_max(size_t a, size_t b)
 }
 
 
-static void
+void
 rpc_buffer_reserve(
     struct rpc_buffer * buffer,
     size_t needed)
