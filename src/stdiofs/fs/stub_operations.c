@@ -234,7 +234,29 @@ fs_stub_symlink(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * from;
+    char * to;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"from"  , RPC_IN , RPC_STRING, &from     , NULL},
+        {"to"    , RPC_IN , RPC_STRING, &to       , NULL},
+        {"result", RPC_OUT, RPC_INT   , &op_result, NULL},
+        {NULL    , RPC_END, RPC_NONE  , NULL      , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.symlink(stub->user_data, 
+            from, to);
+
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_SYMLINK, args);
+    }
+
+    printf("symlink: %d\n", result);
+    return result;
 }
 
 static int
@@ -242,7 +264,25 @@ fs_stub_unlink(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"path"  , RPC_IN , RPC_STRING, &path     , NULL},
+        {"result", RPC_OUT, RPC_INT   , &op_result, NULL},
+        {NULL    , RPC_END, RPC_NONE  , NULL      , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.unlink(stub->user_data, path);
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_UNLINK, args);
+    }
+
+    printf("unlink: %d\n", result);
+    return result;
 }
 
 static int
