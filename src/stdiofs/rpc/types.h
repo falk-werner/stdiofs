@@ -3,8 +3,10 @@
 
 #ifndef __cplusplus
 #include <stddef.h>
+#include <inttypes.h>
 #else
 #include <cstddef>
+#include <cinttypes>
 #endif
 
 #ifdef __cplusplus
@@ -56,6 +58,11 @@ rpc_serialize_string(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
 
+extern int
+rpc_deserialize_string(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const *arg);
+
 extern void
 rpc_serialize_raw_int(
     struct rpc_buffer * buffer,
@@ -82,8 +89,28 @@ rpc_serialize_u64(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
 
+extern void
+rpc_serialize_raw_u64(
+    struct rpc_buffer * buffer,
+    uint64_t value);
+
+extern int
+rpc_deserialize_u64(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg);
+
+extern int
+rpc_deserialize_raw_u64(
+    struct rpc_buffer * buffer,
+    uint64_t * value);
+
 extern int
 rpc_serialize_stat(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg);
+
+extern int
+rpc_deserialize_stat(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
 
@@ -108,14 +135,20 @@ rpc_serialize_dev(
     struct rpc_arg const * arg);
 
 extern void
-rpc_serialize_raw_size(
+rpc_serialize_raw_u32(
     struct rpc_buffer * buffer,
-    size_t value);
+    uint32_t value);
 
 extern int
 rpc_serialize_size(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
+
+extern int
+rpc_deserialize_raw_u32(
+    struct rpc_buffer * buffer,
+    uint32_t * value);
+
 
 extern int
 rpc_serialize_bytes(

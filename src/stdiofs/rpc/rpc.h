@@ -8,9 +8,11 @@ extern "C"
 
 struct rpc;
 struct rpc_arg;
+struct rpc_connection;
 
 extern struct rpc *
-rpc_create(void);
+rpc_create(
+    struct rpc_connection * connection);
 
 extern void
 rpc_release(

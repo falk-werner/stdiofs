@@ -57,7 +57,6 @@ rpc_buffer_skip(
 extern char *
 rpc_buffer_read(
     struct rpc_buffer * buffer,
-    char * data,
     size_t count);
 
 extern void

@@ -1,9 +1,9 @@
 #include "stdiofs/fs/proxy.h"
+#include "stdiofs/fs/methods.h"
 
 #include "stdiofs/rpc/rpc.h"
 #include "stdiofs/rpc/arg.h"
 #include "stdiofs/rpc/types.h"
-#include "stdiofs/rpc/methods.h"
 
 #include <stdlib.h>
 
@@ -41,13 +41,13 @@ fs_proxy_getattr(
     struct rpc_arg const args[] =
     {
         {"path"       , RPC_IN , RPC_STRING, (void*) path, NULL},
-        {"buffer"     , RPC_IN , RPC_STAT  , buffer      , NULL},
         {"file_handle", RPC_IN , RPC_UINT64, &file_handle, NULL},
         {"result"     , RPC_OUT, RPC_INT   , &result     , NULL},
+        {"buffer"     , RPC_OUT, RPC_STAT  , buffer      , NULL},
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_GETATTR, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_GETATTR, args);
     if (0 != rc)
     {
         result = -1;
@@ -71,7 +71,7 @@ fs_proxy_access(
         {NULL    , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_ACCESS, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_ACCESS, args);
     if (0 != rc)
     {
         result = -1;
@@ -97,7 +97,7 @@ fs_proxy_readlink(
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_READLINK, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_READLINK, args);
     if (0 != rc)
     {
         result = -1;
@@ -126,7 +126,7 @@ fs_proxy_readdir(
         {NULL         , RPC_END, RPC_NONE     , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_READDIR, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_READDIR, args);
     if (0 != rc)
     {
         result = -1;
@@ -152,7 +152,7 @@ fs_proxy_mknod(
         {NULL    , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_MKNOD, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_MKNOD, args);
     if (0 != rc)
     {
         result = -1;
@@ -176,7 +176,7 @@ fs_proxy_mkdir(
         {NULL    , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_MKDIR, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_MKDIR, args);
     if (0 != rc)
     {
         result = -1;
@@ -198,7 +198,7 @@ fs_proxy_unlink(
         {NULL    , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_UNLINK, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_UNLINK, args);
     if (0 != rc)
     {
         result = -1;
@@ -220,7 +220,7 @@ fs_proxy_rmdir(
         {NULL    , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_RMDIR, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_RMDIR, args);
     if (0 != rc)
     {
         result = -1;
@@ -244,7 +244,7 @@ fs_proxy_symlink(
         {NULL    , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_SYMLINK, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_SYMLINK, args);
     if (0 != rc)
     {
         result = -1;
@@ -270,7 +270,7 @@ fs_proxy_rename(
         {NULL    , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_RENAME, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_RENAME, args);
     if (0 != rc)
     {
         result = -1;
@@ -294,7 +294,7 @@ fs_proxy_link(
         {NULL    , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_LINK, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_LINK, args);
     if (0 != rc)
     {
         result = -1;
@@ -318,7 +318,7 @@ fs_proxy_chmod(
         {NULL    , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_CHMOD, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_CHMOD, args);
     if (0 != rc)
     {
         result = -1;
@@ -344,7 +344,7 @@ fs_proxy_chown(
         {NULL    , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_CHOWN, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_CHOWN, args);
     if (0 != rc)
     {
         result = -1;
@@ -370,7 +370,7 @@ fs_proxy_truncate(
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_TRUNCATE, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_TRUNCATE, args);
     if (0 != rc)
     {
         result = -1;
@@ -398,7 +398,7 @@ fs_proxy_create_file(
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_CREATE, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_CREATE, args);
     if (0 != rc)
     {
         result = -1;
@@ -424,7 +424,7 @@ fs_proxy_open(
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_OPEN, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_OPEN, args);
     if (0 != rc)
     {
         result = -1;
@@ -454,7 +454,7 @@ fs_proxy_read(
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_READ, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_READ, args);
     if (0 != rc)
     {
         result = -1;
@@ -484,7 +484,7 @@ fs_proxy_write(
         {NULL         , RPC_END, RPC_NONE  , NULL          , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_WRITE, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_WRITE, args);
     if (0 != rc)
     {
         result = -1;
@@ -508,7 +508,7 @@ fs_proxy_statfs(
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_STATFS, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_STATFS, args);
     if (0 != rc)
     {
         result = -1;
@@ -532,7 +532,7 @@ fs_proxy_release_handle(
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_RELEASE, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_RELEASE, args);
     if (0 != rc)
     {
         result = -1;
@@ -558,7 +558,7 @@ fs_proxy_fsync(
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_FSYNC, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_FSYNC, args);
     if (0 != rc)
     {
         result = -1;
@@ -586,7 +586,7 @@ fs_proxy_lseek(
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
-    int rc = rpc_invoke(proxy->rpc, RPC_METHOD_LSEEK, args);
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_LSEEK, args);
     if (0 != rc)
     {
         result = -1;

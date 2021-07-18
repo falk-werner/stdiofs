@@ -12,8 +12,10 @@ add_library(stdiofs STATIC
     src/stdiofs/proxyfs.c
     src/stdiofs/fs/proxy.c
     src/stdiofs/fs/stub.c
+    src/stdiofs/fs/stub_operations.c
     src/stdiofs/passthroughfs.c
     src/stdiofs/rpc/rpc.c
+    src/stdiofs/rpc/stub.c
     src/stdiofs/rpc/buffer.c
     src/stdiofs/rpc/serializer.c
     src/stdiofs/rpc/deserializer.c
@@ -23,6 +25,7 @@ add_library(stdiofs STATIC
     src/stdiofs/rpc/type/string.c
     src/stdiofs/rpc/type/size.c
     src/stdiofs/rpc/type/u64.c
+    src/stdiofs/rpc/type/stat.c
 )
 
 target_include_directories(stdiofs PRIVATE src)

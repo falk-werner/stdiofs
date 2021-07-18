@@ -8,9 +8,11 @@ extern "C"
 
 struct fs_stub;
 struct fs_operations;
+struct rpc_connection;
 
 extern struct fs_stub *
 fs_stub_create(
+    struct rpc_connection * connection,
     struct fs_operations const * operations,
     void * user_data);
 
@@ -18,7 +20,7 @@ extern void
 fs_stub_release(
     struct fs_stub * stub);
 
-extern void
+extern int
 fs_stub_service(
     struct fs_stub * stub);
 

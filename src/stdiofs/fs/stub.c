@@ -1,14 +1,37 @@
 #include "stdiofs/fs/stub_intern.h"
+#include "stdiofs/fs/stub_operations.h"
+#include "stdiofs/rpc/stub.h"
+#include "stdiofs/rpc/deserializer.h"
 
 #include <stdlib.h>
 #include <string.h>
 
+#include <stdio.h>
+
+static int
+fs_stub_on_methodcall(
+    void * user_data,
+    struct rpc_buffer *buffer)
+{
+    puts("methodcall");
+    struct fs_stub * stub = user_data;
+
+    int const method_id = rpc_get_method_id(buffer);
+
+    fs_stub_operation_fn * operation = fs_stub_get_operation(method_id);
+    int const result = operation(stub, buffer);
+
+    return result;
+}
+
 struct fs_stub *
 fs_stub_create(
+    struct rpc_connection * connection,
     struct fs_operations const * operations,
     void * user_data)
 {
     struct fs_stub * stub = malloc(sizeof(struct fs_stub));
+    stub->rpc = rpc_stub_create(&fs_stub_on_methodcall, stub, connection);
     stub->operations.init = operations->init;
     stub->operations.cleanup = operations->cleanup;
     stub->operations.getattr = operations->getattr;
@@ -44,12 +67,12 @@ fs_stub_release(
     struct fs_stub * stub)
 {
     stub->operations.cleanup(stub->user_data);
+    rpc_stub_release(stub->rpc);
 }
 
-void
+int
 fs_stub_service(
     struct fs_stub * stub)
 {
-    // ToDo: implement me
-    (void) stub;
+    return rpc_stub_service(stub->rpc);
 }

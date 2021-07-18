@@ -1,5 +1,6 @@
 #include "stdiofs/rpc/connection.h"
 #include "stdiofs/rpc/buffer.h"
+#include "stdiofs/rpc/status.h"
 
 #include <unistd.h>
 #include <errno.h>
@@ -27,7 +28,7 @@ rpc_connection_read_exact(
         }
         else if (0 == length)
         {
-            result = -3;
+            result = RPC_BAD_CONNECTION_CLOSED;
             break;
         }
         else
@@ -35,7 +36,7 @@ rpc_connection_read_exact(
             int error_code = errno;
             if ((errno != EAGAIN) && (errno != EWOULDBLOCK) && (errno != EINTR))
             {
-                result = -1;
+                result = RPC_BAD_CONNECTION_READ_ERROR;
                 break;
             }
         }
@@ -89,7 +90,7 @@ rpc_connection_write(
             int error_code = errno;
             if ((errno != EAGAIN) && (errno != EWOULDBLOCK) && (errno != EINTR))
             {
-                result = -1;
+                result = RPC_BAD_CONNECTION_WRITE_ERROR;
                 break;
             }
         }
@@ -129,7 +130,7 @@ rpc_connection_read(
         }
         else
         {
-            result = -2;
+            result = RPC_BAD_MAX_MESSAGE_SIZE_EXCEEDED;
         }
 
     }

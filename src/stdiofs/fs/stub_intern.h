@@ -9,8 +9,11 @@ extern "C"
 {    
 #endif
 
+struct rpc_stub;
+
 struct fs_stub
 {
+    struct rpc_stub * rpc;
     struct fs_operations operations;
     void * user_data;
 };

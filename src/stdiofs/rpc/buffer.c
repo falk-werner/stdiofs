@@ -102,7 +102,6 @@ rpc_buffer_skip(
 char *
 rpc_buffer_read(
     struct rpc_buffer * buffer,
-    char * data,
     size_t count)
 {
     char * result = NULL;

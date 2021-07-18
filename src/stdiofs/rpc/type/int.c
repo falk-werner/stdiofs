@@ -1,6 +1,7 @@
 #include "stdiofs/rpc/types.h"
 #include "stdiofs/rpc/buffer.h"
 #include "stdiofs/rpc/arg.h"
+#include "stdiofs/rpc/status.h"
 
 #define RPC_INT_SIZE 4
 
@@ -39,9 +40,9 @@ rpc_deserialize_raw_int(
     struct rpc_buffer * buffer,
     int * value)
 {
-    int result = -1;
+    int result = RPC_BAD_DESERIALIZE_FAILED;
 
-    char * data = rpc_buffer_read(buffer, data, RPC_INT_SIZE);
+    char * data = rpc_buffer_read(buffer, RPC_INT_SIZE);
     if (NULL != data)
     {
         unsigned int val = 0;
