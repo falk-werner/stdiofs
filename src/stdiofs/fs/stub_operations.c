@@ -316,7 +316,31 @@ fs_stub_rename(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * from;
+    char * to;
+    int flags;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"from"  , RPC_IN , RPC_STRING, &from     , NULL},
+        {"to"    , RPC_IN , RPC_STRING, &to       , NULL},
+        {"flags" , RPC_IN , RPC_INT   , &flags    , NULL},
+        {"result", RPC_OUT, RPC_INT   , &op_result, NULL},
+        {NULL    , RPC_END, RPC_NONE  , NULL      , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.rename(stub->user_data, 
+            from, to, flags);
+
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_RENAME, args);
+    }
+
+    printf("rename: %d\n", result);
+    return result;
 }
 
 static int
@@ -324,7 +348,29 @@ fs_stub_link(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * from;
+    char * to;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"from"  , RPC_IN , RPC_STRING, &from     , NULL},
+        {"to"    , RPC_IN , RPC_STRING, &to       , NULL},
+        {"result", RPC_OUT, RPC_INT   , &op_result, NULL},
+        {NULL    , RPC_END, RPC_NONE  , NULL      , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.link(stub->user_data, 
+            from, to);
+
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_LINK, args);
+    }
+
+    printf("link: %d\n", result);
+    return result;
 }
 
 static int
