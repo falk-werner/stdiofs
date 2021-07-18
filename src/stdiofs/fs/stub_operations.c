@@ -96,7 +96,37 @@ fs_stub_readlink(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    size_t buffer_size;
+
+    struct rpc_arg const inargs[] =
+    {
+        {"path"       , RPC_IN , RPC_STRING, &path        , NULL},
+        {"buffer_size", RPC_IN , RPC_INT   , &buffer_size, NULL},
+        {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, inargs);
+    if (0 == result)
+    {
+        char * name_buffer = malloc(buffer_size);
+        int op_result = stub->operations.readlink(stub->user_data, 
+            path, name_buffer, buffer_size);
+
+        struct rpc_arg const outargs[] =
+        {
+            {"result"     , RPC_OUT, RPC_INT   , &op_result  , NULL},
+            {"buffer"     , RPC_OUT, RPC_STRING, name_buffer , NULL},
+            {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
+        };
+
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_READLINK, outargs);
+        free(name_buffer);
+    }
+
+
+    printf("readlink: %d\n", result);
+    return result;
 }
 
 static int
