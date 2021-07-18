@@ -123,7 +123,7 @@ fs_proxy_readdir(
         {"offset"     , RPC_IN , RPC_OFFSET   , &offset     , NULL},
         {"file_handle", RPC_IN , RPC_UINT64   , &file_handle, NULL},
         {"result"     , RPC_OUT, RPC_INT      , &result     , NULL},
-        {"buffer"     , RPC_OUT, RPC_DIRBUFFER, &result     , add },
+        {"buffer"     , RPC_OUT, RPC_DIRBUFFER, buffer      , add },
         {NULL         , RPC_END, RPC_NONE     , NULL        , NULL}
     };
 

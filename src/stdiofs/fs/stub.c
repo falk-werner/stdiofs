@@ -13,7 +13,6 @@ fs_stub_on_methodcall(
     void * user_data,
     struct rpc_buffer *buffer)
 {
-    puts("methodcall");
     struct fs_stub * stub = user_data;
 
     int const method_id = rpc_get_method_id(buffer);

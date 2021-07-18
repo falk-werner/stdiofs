@@ -1,6 +1,8 @@
 #ifndef RPC_TYPES_H
 #define RPC_TYPES_H
 
+#include "stdiofs/rpc/type/dirbuffer.h"
+
 #ifndef __cplusplus
 #include <stddef.h>
 #include <inttypes.h>
@@ -58,10 +60,20 @@ rpc_serialize_string(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
 
+extern void
+rpc_serialize_raw_string(
+    struct rpc_buffer * buffer,
+    char const * value);
+
 extern int
 rpc_deserialize_string(
     struct rpc_buffer * buffer,
     struct rpc_arg const *arg);
+
+extern int
+rpc_deserialize_raw_string(
+    struct rpc_buffer * buffer,
+    char * * value);
 
 extern void
 rpc_serialize_raw_int(
@@ -120,14 +132,15 @@ rpc_serialize_offset(
     struct rpc_arg const * arg);
 
 extern int
-rpc_serialize_mode(
+rpc_deserialize_offset(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
 
 extern int
-rpc_serialize_dirbuffer(
+rpc_serialize_mode(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
+
 
 extern int
 rpc_serialize_dev(

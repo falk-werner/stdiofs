@@ -134,7 +134,36 @@ fs_stub_readdir(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    off_t offset;
+    uint64_t file_handle;
+    int op_result;
+
+    struct rpc_dirbuffer dirbuffer;
+    rpc_dirbuffer_init(&dirbuffer);
+
+    struct rpc_arg const args[] =
+    {
+        {"path"       , RPC_IN , RPC_STRING   , &path       , NULL},
+        {"offset"     , RPC_IN , RPC_OFFSET   , &offset     , NULL},
+        {"file_handle", RPC_IN , RPC_UINT64   , &file_handle, NULL},
+        {"result"     , RPC_OUT, RPC_INT      , &op_result  , NULL},
+        {"buffer"     , RPC_OUT, RPC_DIRBUFFER, &dirbuffer  , NULL},
+        {NULL         , RPC_END, RPC_NONE     , NULL        , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.readdir(stub->user_data, 
+            path, &dirbuffer, &rpc_dirbuffer_add, offset, file_handle);
+
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_READDIR, args);
+    }
+
+    rpc_dirbuffer_cleanup(&dirbuffer);
+    printf("readdir: %d\n", result);
+    return result;
 }
 
 static int

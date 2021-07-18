@@ -109,15 +109,16 @@ TEST(rpc_serializer, empty_string)
     int result = rpc_serialize(&buffer, RPC_IN, 0x0102, args);
 
     ASSERT_EQ(0, result);
-    ASSERT_EQ(12, buffer.size);
+    ASSERT_EQ(13, buffer.size);
 
     char expected_cstr[]=
     {
-        0x00, 0x00, 0x00, 12,
+        0x00, 0x00, 0x00, 13,
         0x00, 0x00, 0x01, 0x02,
-        0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x01,
+        0x00
     };
-    std::string expected(expected_cstr, 12);
+    std::string expected(expected_cstr, 13);
     ASSERT_EQ(expected, std::string(buffer.data, buffer.size));
 
     rpc_buffer_cleanup(&buffer);
@@ -125,7 +126,7 @@ TEST(rpc_serializer, empty_string)
 
 TEST(rpc_serializer, string_value)
 {
-    char const value[] = "foo!";
+    char const value[] = "foo";
     rpc_buffer buffer;
     rpc_buffer_init(&buffer, 0);
     rpc_arg args[] = {
@@ -143,7 +144,7 @@ TEST(rpc_serializer, string_value)
         0x00, 0x00, 0x00, 16,
         0x00, 0x00, 0x01, 0x02,
         0x00, 0x00, 0x00, 0x04,
-        'f' , 'o' , 'o' , '!'
+        'f' , 'o' , 'o' , 0x00
     };
     std::string expected(expected_cstr, 16);
     ASSERT_EQ(expected, std::string(buffer.data, buffer.size));

@@ -13,7 +13,7 @@ TEST(rpc_unknown, fail_to_serialize)
     rpc_serialize_fn * serialize = rpc_get_serializer(arg.type);
     int result = serialize(&buffer, &arg);
 
-    ASSERT_EQ(-1, result);
+    ASSERT_NE(0, result);
     ASSERT_EQ(0, buffer.size);
 
     rpc_buffer_cleanup(&buffer);

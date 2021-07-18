@@ -42,6 +42,10 @@ rpc_get_serializer(int type_id)
             return &rpc_serialize_u64;
         case RPC_STAT:
             return &rpc_serialize_stat;
+        case RPC_DIRBUFFER:
+            return &rpc_serialize_dirbuffer;
+        case RPC_OFFSET:
+            return &rpc_serialize_offset;
         default:
             return &rpc_serialize_unknown;
     }
@@ -60,6 +64,10 @@ rpc_get_deserializer(int type_id)
             return &rpc_deserialize_u64;
         case RPC_STAT:
             return &rpc_deserialize_stat;
+        case RPC_DIRBUFFER:
+            return &rpc_deserialize_dirbuffer;
+        case RPC_OFFSET:
+            return &rpc_deserialize_offset;
         default:
             return &rpc_deserialize_unknown;
     }

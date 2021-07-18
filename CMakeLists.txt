@@ -26,6 +26,8 @@ add_library(stdiofs STATIC
     src/stdiofs/rpc/type/size.c
     src/stdiofs/rpc/type/u64.c
     src/stdiofs/rpc/type/stat.c
+    src/stdiofs/rpc/type/dirbuffer.c
+    src/stdiofs/rpc/type/offset.c
 )
 
 target_include_directories(stdiofs PRIVATE src)
@@ -49,6 +51,7 @@ add_executable(alltests
     test/stdiofs/rpc/deserializer.cpp
     test/stdiofs/rpc/type/unknown.cpp
     test/stdiofs/rpc/type/int.cpp
+    test/stdiofs/rpc/type/dirbuffer.cpp
 )
 
 target_include_directories(alltests PRIVATE src test)

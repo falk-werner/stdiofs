@@ -99,7 +99,8 @@ proxyfs_readdir(
         .filler = filler
     };
 
-    return fs_proxy_readdir(proxy, path, &context, &proxyfs_adddir, offset, info->fh);
+    int result = fs_proxy_readdir(proxy, path, &context, &proxyfs_adddir, offset, info->fh);
+    return result;
 }
 
 static int
