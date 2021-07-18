@@ -392,7 +392,7 @@ fs_proxy_create_file(
     {
         {"path"       , RPC_IN , RPC_STRING, (void*) path, NULL},
         {"mode"       , RPC_IN , RPC_MODE  , &mode       , NULL},
-        {"flags"      , RPC_IN , RPC_MODE  , &flags      , NULL},
+        {"flags"      , RPC_IN , RPC_INT   , &flags      , NULL},
         {"result"     , RPC_OUT, RPC_INT   , &result     , NULL},
         {"file_handle", RPC_OUT, RPC_UINT64, file_handle, NULL},
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}

@@ -54,6 +54,8 @@ rpc_get_serializer(int type_id)
             return &rpc_serialize_uid;
         case RPC_GID:
             return &rpc_serialize_gid;
+        case RPC_BYTES:
+            return &rpc_serialize_bytes;
         default:
             return &rpc_serialize_unknown;
     }
@@ -86,6 +88,8 @@ rpc_get_deserializer(int type_id)
             return &rpc_deserialize_uid;
         case RPC_GID:
             return &rpc_deserialize_gid;
+        case RPC_BYTES:
+            return &rpc_deserialize_bytes;
         default:
             return &rpc_deserialize_unknown;
     }

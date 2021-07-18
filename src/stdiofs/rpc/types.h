@@ -203,6 +203,11 @@ rpc_serialize_bytes(
     struct rpc_arg const * arg);
 
 extern int
+rpc_deserialize_bytes(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg);
+
+extern int
 rpc_serialize_statfs(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);

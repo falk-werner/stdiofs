@@ -437,7 +437,30 @@ fs_stub_truncate(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    off_t size;
+    uint64_t file_handle;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"path"       , RPC_IN , RPC_STRING, &path       , NULL},
+        {"size"       , RPC_IN , RPC_OFFSET, &size       , NULL},
+        {"file_handle", RPC_IN , RPC_UINT64, &file_handle, NULL},
+        {"result"     , RPC_OUT, RPC_INT   , &op_result  , NULL},
+        {NULL    , RPC_END, RPC_NONE  , NULL      , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.truncate(stub->user_data, 
+            path, size, file_handle);
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_TRUNCATE, args);
+    }
+
+    printf("truncate: %d\n", result);
+    return result;
 }
 
 static int
@@ -445,7 +468,32 @@ fs_stub_create_file(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    mode_t mode;
+    int flags;
+    uint64_t file_handle;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"path"       , RPC_IN , RPC_STRING, &path       , NULL},
+        {"mode"       , RPC_IN , RPC_MODE  , &mode       , NULL},
+        {"flags"      , RPC_IN , RPC_INT   , &flags      , NULL},
+        {"result"     , RPC_OUT, RPC_INT   , &op_result  , NULL},
+        {"file_handle", RPC_OUT, RPC_UINT64, &file_handle, NULL},
+        {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.create(stub->user_data, 
+            path, mode, flags, &file_handle);
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_CREATE, args);
+    }
+
+    printf("create: %d\n", result);
+    return result;
 }
 
 static int
@@ -453,7 +501,30 @@ fs_stub_open(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    int flags;
+    uint64_t file_handle;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"path"       , RPC_IN , RPC_STRING, &path       , NULL},
+        {"flags"      , RPC_IN , RPC_INT   , &flags      , NULL},
+        {"result"     , RPC_OUT, RPC_INT   , &op_result  , NULL},
+        {"file_handle", RPC_OUT, RPC_UINT64, &file_handle, NULL},
+        {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.open(stub->user_data, 
+            path, flags, &file_handle);
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_OPEN, args);
+    }
+
+    printf("open: %d\n", result);
+    return result;
 }
 
 static int
@@ -461,7 +532,42 @@ fs_stub_read(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    size_t buffer_size;
+    off_t offset;
+    uint64_t file_handle;
+
+    struct rpc_arg const inargs[] =
+    {
+        {"path"       , RPC_IN , RPC_STRING, &path       , NULL},
+        {"buffer_size", RPC_IN , RPC_SIZE  , &buffer_size, NULL},
+        {"offset"     , RPC_IN , RPC_OFFSET, &offset     , NULL},
+        {"file_handle", RPC_IN , RPC_UINT64, &file_handle, NULL},
+        {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, inargs);
+    if (0 == result)
+    {
+        char * read_buffer = malloc(buffer_size);
+
+        int op_result = stub->operations.read(stub->user_data, 
+            path, read_buffer, buffer_size, offset, file_handle);
+
+        size_t length = (op_result > 0) ? (size_t) op_result : 0;
+        struct rpc_arg const outargs[] =
+        {
+            {"result"     , RPC_OUT, RPC_INT   , &op_result  , NULL},
+            {"buffer"     , RPC_OUT, RPC_BYTES , read_buffer , &length},
+            {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
+        };
+
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_READ, outargs);
+        free(read_buffer);
+    }
+
+    printf("read: %d\n", result);
+    return result;
 }
 
 static int
@@ -485,7 +591,28 @@ fs_stub_release_handle(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    uint64_t file_handle;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"path"       , RPC_IN , RPC_STRING, &path       , NULL},
+        {"file_handle", RPC_IN , RPC_UINT64, &file_handle, NULL},
+        {"result"     , RPC_OUT, RPC_INT   , &op_result  , NULL},
+        {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.release(stub->user_data, 
+            path, file_handle);
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_RELEASE, args);
+    }
+
+    printf("release: %d\n", result);
+    return result;
 }
 
 static int
