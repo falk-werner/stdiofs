@@ -28,6 +28,8 @@ add_library(stdiofs STATIC
     src/stdiofs/rpc/type/stat.c
     src/stdiofs/rpc/type/dirbuffer.c
     src/stdiofs/rpc/type/offset.c
+    src/stdiofs/rpc/type/mode.c
+    src/stdiofs/rpc/type/dev.c
 )
 
 target_include_directories(stdiofs PRIVATE src)

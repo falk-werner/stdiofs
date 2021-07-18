@@ -59,3 +59,18 @@ rpc_deserialize_raw_u32(
 
 }
 
+int
+rpc_deserialize_size(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg)
+{
+    uint32_t value;
+    int result = rpc_deserialize_raw_u32(buffer, &value);
+    if (0 == result)
+    {
+        size_t * size = arg->value;
+        *size = (size_t) value;
+    }
+
+    return result;
+}

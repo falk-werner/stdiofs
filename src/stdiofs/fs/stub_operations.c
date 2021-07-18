@@ -101,8 +101,8 @@ fs_stub_readlink(
 
     struct rpc_arg const inargs[] =
     {
-        {"path"       , RPC_IN , RPC_STRING, &path        , NULL},
-        {"buffer_size", RPC_IN , RPC_INT   , &buffer_size, NULL},
+        {"path"       , RPC_IN , RPC_STRING, &path       , NULL},
+        {"buffer_size", RPC_IN , RPC_SIZE  , &buffer_size, NULL},
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
     };
 
@@ -113,6 +113,7 @@ fs_stub_readlink(
         int op_result = stub->operations.readlink(stub->user_data, 
             path, name_buffer, buffer_size);
 
+        printf("readlink: result=%d, path=%s, name=%s, buffer_size=%zu\n", result, path, name_buffer, buffer_size);
         struct rpc_arg const outargs[] =
         {
             {"result"     , RPC_OUT, RPC_INT   , &op_result  , NULL},
@@ -171,7 +172,32 @@ fs_stub_mknod(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    mode_t mode;
+    dev_t rdev;
+    int op_result;
+
+
+    struct rpc_arg const args[] =
+    {
+        {"path"  , RPC_IN , RPC_STRING, &path     , NULL},
+        {"mode"  , RPC_IN , RPC_MODE  , &mode     , NULL},
+        {"rdev"  , RPC_IN , RPC_DEV   , &rdev     , NULL},
+        {"result", RPC_OUT, RPC_INT   , &op_result, NULL},
+        {NULL    , RPC_END, RPC_NONE  , NULL      , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.mknod(stub->user_data, 
+            path, mode, rdev);
+
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_READDIR, args);
+    }
+
+    printf("mknod: %d\n", result);
+    return result;
 }
 
 static int
@@ -326,7 +352,7 @@ fs_stub_get_operation(
         case FS_METHOD_READDIR:
             return &fs_stub_readdir;
         case FS_METHOD_MKNOD:
-            return &fs_stub_mkdir;
+            return &fs_stub_mknod;
         case FS_METHOD_MKDIR:
             return &fs_stub_mkdir;
         case FS_METHOD_SYMLINK:

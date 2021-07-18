@@ -141,9 +141,18 @@ rpc_serialize_mode(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
 
+int
+rpc_deserialize_mode(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg);
 
 extern int
 rpc_serialize_dev(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg);
+
+extern int
+rpc_deserialize_dev(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
 
@@ -161,6 +170,11 @@ extern int
 rpc_deserialize_raw_u32(
     struct rpc_buffer * buffer,
     uint32_t * value);
+
+extern int
+rpc_deserialize_size(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg);
 
 
 extern int

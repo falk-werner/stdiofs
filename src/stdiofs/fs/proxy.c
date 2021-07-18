@@ -87,11 +87,10 @@ fs_proxy_readlink(
     size_t buffer_size)
 {
     int result;
-
     struct rpc_arg const args[] =
     {
         {"path"       , RPC_IN , RPC_STRING, (void*) path, NULL},
-        {"buffer_size", RPC_IN , RPC_INT   , &buffer_size, NULL},
+        {"buffer_size", RPC_IN , RPC_SIZE  , &buffer_size, NULL},
         {"result"     , RPC_OUT, RPC_INT   , &result     , NULL},
         {"buffer"     , RPC_OUT, RPC_STRING, buffer      , &buffer_size},
         {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}

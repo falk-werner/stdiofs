@@ -52,8 +52,7 @@ rpc_deserialize_raw_int(
             val |= ((unsigned int) data[i]) & 0xff;
         }
 
-        int * p = (int*) &val;
-        *value = *p;
+        *value = (int) val;
         result = 0;
     }
 
