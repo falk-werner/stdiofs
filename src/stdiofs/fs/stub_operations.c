@@ -290,7 +290,25 @@ fs_stub_rmdir(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"path"  , RPC_IN , RPC_STRING, &path     , NULL},
+        {"result", RPC_OUT, RPC_INT   , &op_result, NULL},
+        {NULL    , RPC_END, RPC_NONE  , NULL      , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.rmdir(stub->user_data, path);
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_RMDIR, args);
+    }
+
+    printf("rmdir: %d\n", result);
+    return result;
 }
 
 static int
