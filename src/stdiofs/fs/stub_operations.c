@@ -378,7 +378,27 @@ fs_stub_chmod(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    mode_t mode;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"path"  , RPC_IN , RPC_STRING, &path     , NULL},
+        {"mode"  , RPC_IN , RPC_MODE  , &mode     , NULL},
+        {"result", RPC_OUT, RPC_INT   , &op_result, NULL},
+        {NULL    , RPC_END, RPC_NONE  , NULL      , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.chmod(stub->user_data, path, mode);
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_CHMOD, args);
+    }
+
+    printf("chmod: %d\n", result);
+    return result;
 }
 
 static int
