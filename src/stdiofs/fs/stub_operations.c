@@ -406,7 +406,30 @@ fs_stub_chown(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    uid_t uid;
+    gid_t gid;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"path"  , RPC_IN , RPC_STRING, &path     , NULL},
+        {"uid "  , RPC_IN , RPC_UID   , &uid      , NULL},
+        {"gid "  , RPC_IN , RPC_GID   , &gid      , NULL},
+        {"result", RPC_OUT, RPC_INT   , &op_result, NULL},
+        {NULL    , RPC_END, RPC_NONE  , NULL      , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.chown(stub->user_data, 
+            path, uid, gid);
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_CHOWN, args);
+    }
+
+    printf("chown: %d\n", result);
+    return result;
 }
 
 static int

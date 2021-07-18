@@ -141,8 +141,28 @@ rpc_serialize_mode(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
 
-int
+extern int
 rpc_deserialize_mode(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg);
+
+extern int
+rpc_serialize_uid(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg);
+
+extern int
+rpc_deserialize_uid(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg);
+
+extern int
+rpc_serialize_gid(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg);
+
+extern int
+rpc_deserialize_gid(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
 
