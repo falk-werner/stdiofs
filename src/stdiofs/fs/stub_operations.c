@@ -34,7 +34,7 @@ fs_stub_getattr(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    char * path = NULL;
+    char * path;
     struct stat stat_buffer;
     uint64_t file_handle;
     int op_result;
@@ -57,7 +57,6 @@ fs_stub_getattr(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_GETATTR, args);
     }
 
-    free(path);
     printf("getattr: %d\n", result);
     return result;
 }
@@ -67,7 +66,7 @@ fs_stub_access(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    char * path = NULL;
+    char * path;
     int mask;
     int op_result;
 
@@ -88,7 +87,6 @@ fs_stub_access(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_ACCESS, args);
     }
 
-    free(path);
     printf("access: %d\n", result);
     return result;
 }
