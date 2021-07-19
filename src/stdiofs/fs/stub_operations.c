@@ -523,7 +523,7 @@ fs_stub_open(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_OPEN, args);
     }
 
-    printf("open: %d\n", result);
+    printf("open: %d, %d, file_handle=%lu\n", result, op_result, file_handle);
     return result;
 }
 
@@ -575,7 +575,34 @@ fs_stub_write(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    char * write_buffer;
+    size_t buffer_size = (size_t) -1;
+    off_t offset;
+    uint64_t file_handle;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"path"       , RPC_IN , RPC_STRING, &path       , NULL},
+        {"buffer"     , RPC_IN , RPC_BYTES , &write_buffer, &buffer_size},
+        {"offset"     , RPC_IN , RPC_OFFSET, &offset     , NULL},
+        {"file_handle", RPC_IN , RPC_UINT64, &file_handle, NULL},
+        {"result"     , RPC_OUT, RPC_INT   , &op_result  , NULL},
+        {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.write(stub->user_data, 
+            path, write_buffer, buffer_size, offset, file_handle);
+
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_WRITE, args);
+    }
+
+    printf("write: %d, %d, handle=%lu\n", result, op_result, file_handle);
+    return result;
 }
 
 static int
@@ -620,7 +647,30 @@ fs_stub_fsync(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    int isdatasync;
+    uint64_t file_handle;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"path"       , RPC_IN , RPC_STRING, &path       , NULL},
+        {"isdatasync" , RPC_IN , RPC_INT   , &isdatasync , NULL},
+        {"file_handle", RPC_IN , RPC_UINT64, &file_handle, NULL},
+        {"result"     , RPC_OUT, RPC_INT   , &op_result  , NULL},
+        {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.fsync(stub->user_data, 
+            path, isdatasync, file_handle);
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_FSYNC, args);
+    }
+
+    printf("fsync: %d\n", result);
+    return result;
 }
 
 static int
@@ -628,7 +678,32 @@ fs_stub_lseek(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    off_t offset;
+    int whence;
+    uint64_t file_handle;
+    off_t op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"path"       , RPC_IN , RPC_STRING, &path       , NULL},
+        {"offset"     , RPC_IN , RPC_OFFSET, &offset     , NULL},
+        {"whence"     , RPC_IN , RPC_INT   , &whence     , NULL},
+        {"file_handle", RPC_IN , RPC_UINT64, &file_handle, NULL},
+        {"result"     , RPC_OUT, RPC_OFFSET, &op_result  , NULL},
+        {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.lseek(stub->user_data, 
+            path, offset, whence, file_handle);
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_LSEEK, args);
+    }
+
+    printf("lseek: %d\n", result);
+    return result;
 }
 
 

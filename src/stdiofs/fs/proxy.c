@@ -477,7 +477,6 @@ fs_proxy_write(
     {
         {"path"       , RPC_IN , RPC_STRING, (void*) path  , NULL},
         {"buffer"     , RPC_IN , RPC_BYTES , (void*) buffer, &buffer_size},
-        {"buffer_size", RPC_IN , RPC_SIZE  , &buffer_size  , NULL},
         {"offset"     , RPC_IN , RPC_OFFSET, &offset       , NULL},
         {"file_handle", RPC_IN , RPC_UINT64, &file_handle  , NULL},
         {"result"     , RPC_OUT, RPC_INT   , &result       , NULL},

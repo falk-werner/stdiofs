@@ -36,13 +36,22 @@ rpc_deserialize_bytes(
         char * data = rpc_buffer_read(buffer, length);
         if (NULL != data)
         {
-            char * bytes = arg->value;
-            size_t bytes_size = *((size_t *) arg->extra);
-            size_t count = length < bytes_size ? length : bytes_size;
-            
-            if (count > 0)
+            size_t * bytes_size = (size_t *) arg->extra;
+            if (((size_t) -1) != *bytes_size)
             {
-                memcpy(bytes, data, count);
+                char * bytes = arg->value;
+                size_t count = length < *bytes_size ? length : *bytes_size;
+                
+                if (count > 0)
+                {
+                    memcpy(bytes, data, count);
+                }
+            }
+            else
+            {
+                char * * bytes = arg->value;
+                *bytes = data;
+                *bytes_size = (size_t) length;
             }
         }
         else
