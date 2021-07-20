@@ -610,7 +610,29 @@ fs_stub_statfs(
     struct fs_stub * stub,
     struct rpc_buffer * buffer)
 {
-    return -1;
+    char * path;
+    struct statvfs stat_buffer;
+    int op_result;
+
+    struct rpc_arg const args[] =
+    {
+        {"path"       , RPC_IN , RPC_STRING , &path       , NULL},
+        {"result"     , RPC_OUT, RPC_INT    , &op_result  , NULL},
+        {"buffer"     , RPC_OUT, RPC_STATVFS, &stat_buffer, NULL},
+        {NULL         , RPC_END, RPC_NONE   , NULL        , NULL}
+    };
+
+    int result = rpc_deserialize(buffer, RPC_IN, args);
+    if (0 == result)
+    {
+        op_result = stub->operations.statfs(stub->user_data, 
+            path, &stat_buffer);
+
+        result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_STATFS, args);
+    }
+
+    printf("stafs: %d\n", result);
+    return result;
 }
 
 static int

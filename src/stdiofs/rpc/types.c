@@ -42,6 +42,8 @@ rpc_get_serializer(int type_id)
             return &rpc_serialize_u64;
         case RPC_STAT:
             return &rpc_serialize_stat;
+        case RPC_STATVFS:
+            return &rpc_serialize_statvfs;
         case RPC_DIRBUFFER:
             return &rpc_serialize_dirbuffer;
         case RPC_OFFSET:
@@ -76,6 +78,8 @@ rpc_get_deserializer(int type_id)
             return &rpc_deserialize_u64;
         case RPC_STAT:
             return &rpc_deserialize_stat;
+        case RPC_STATVFS:
+            return &rpc_deserialize_statvfs;
         case RPC_DIRBUFFER:
             return &rpc_deserialize_dirbuffer;
         case RPC_OFFSET:

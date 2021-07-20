@@ -501,10 +501,10 @@ fs_proxy_statfs(
 
     struct rpc_arg const args[] =
     {
-        {"path"       , RPC_IN , RPC_STRING, (void*) path, NULL},
-        {"result"     , RPC_OUT, RPC_INT   , &result     , NULL},
-        {"buffer"     , RPC_OUT, RPC_STATFS, &buffer     , NULL},
-        {NULL         , RPC_END, RPC_NONE  , NULL        , NULL}
+        {"path"       , RPC_IN , RPC_STRING , (void*) path, NULL},
+        {"result"     , RPC_OUT, RPC_INT    , &result     , NULL},
+        {"buffer"     , RPC_OUT, RPC_STATVFS, buffer     , NULL},
+        {NULL         , RPC_END, RPC_NONE   , NULL        , NULL}
     };
 
     int rc = rpc_invoke(proxy->rpc, FS_METHOD_STATFS, args);

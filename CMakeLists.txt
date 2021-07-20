@@ -26,6 +26,7 @@ add_library(stdiofs STATIC
     src/stdiofs/rpc/type/size.c
     src/stdiofs/rpc/type/u64.c
     src/stdiofs/rpc/type/stat.c
+    src/stdiofs/rpc/type/statvfs.c
     src/stdiofs/rpc/type/dirbuffer.c
     src/stdiofs/rpc/type/offset.c
     src/stdiofs/rpc/type/mode.c
@@ -63,3 +64,5 @@ target_include_directories(alltests PRIVATE src test)
 target_link_libraries(alltests PRIVATE stdiofs PkgConfig::GTEST)
 
 endif()
+
+add_executable(statvfs  util/statvfs.c)

@@ -32,7 +32,7 @@ extern "C"
 #define RPC_BYTES  10
 
 #define RPC_STAT      11
-#define RPC_STATFS    12
+#define RPC_STATVFS   12
 #define RPC_DIRBUFFER 13
 
 
@@ -208,9 +208,15 @@ rpc_deserialize_bytes(
     struct rpc_arg const * arg);
 
 extern int
-rpc_serialize_statfs(
+rpc_serialize_statvfs(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
+
+extern int
+rpc_deserialize_statvfs(
+    struct rpc_buffer * buffer,
+    struct rpc_arg const * arg);
+
 
 #ifdef __cplusplus
 }
