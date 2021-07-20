@@ -57,7 +57,6 @@ fs_stub_getattr(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_GETATTR, args);
     }
 
-    printf("getattr: %d\n", result);
     return result;
 }
 
@@ -87,7 +86,6 @@ fs_stub_access(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_ACCESS, args);
     }
 
-    printf("access: %d\n", result);
     return result;
 }
 
@@ -113,7 +111,6 @@ fs_stub_readlink(
         int op_result = stub->operations.readlink(stub->user_data, 
             path, name_buffer, buffer_size);
 
-        printf("readlink: result=%d, path=%s, name=%s, buffer_size=%zu\n", result, path, name_buffer, buffer_size);
         struct rpc_arg const outargs[] =
         {
             {"result"     , RPC_OUT, RPC_INT   , &op_result  , NULL},
@@ -125,8 +122,6 @@ fs_stub_readlink(
         free(name_buffer);
     }
 
-
-    printf("readlink: %d\n", result);
     return result;
 }
 
@@ -163,7 +158,6 @@ fs_stub_readdir(
     }
 
     rpc_dirbuffer_cleanup(&dirbuffer);
-    printf("readdir: %d\n", result);
     return result;
 }
 
@@ -195,7 +189,6 @@ fs_stub_mknod(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_MKNOD, args);
     }
 
-    printf("mknod: %d\n", result);
     return result;
 }
 
@@ -225,7 +218,6 @@ fs_stub_mkdir(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_MKDIR, args);
     }
 
-    printf("mkdir: %d\n", result);
     return result;
 }
 
@@ -255,7 +247,6 @@ fs_stub_symlink(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_SYMLINK, args);
     }
 
-    printf("symlink: %d\n", result);
     return result;
 }
 
@@ -281,7 +272,6 @@ fs_stub_unlink(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_UNLINK, args);
     }
 
-    printf("unlink: %d\n", result);
     return result;
 }
 
@@ -307,7 +297,6 @@ fs_stub_rmdir(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_RMDIR, args);
     }
 
-    printf("rmdir: %d\n", result);
     return result;
 }
 
@@ -339,7 +328,6 @@ fs_stub_rename(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_RENAME, args);
     }
 
-    printf("rename: %d\n", result);
     return result;
 }
 
@@ -369,7 +357,6 @@ fs_stub_link(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_LINK, args);
     }
 
-    printf("link: %d\n", result);
     return result;
 }
 
@@ -397,7 +384,6 @@ fs_stub_chmod(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_CHMOD, args);
     }
 
-    printf("chmod: %d\n", result);
     return result;
 }
 
@@ -428,7 +414,6 @@ fs_stub_chown(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_CHOWN, args);
     }
 
-    printf("chown: %d\n", result);
     return result;
 }
 
@@ -459,7 +444,6 @@ fs_stub_truncate(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_TRUNCATE, args);
     }
 
-    printf("truncate: %d\n", result);
     return result;
 }
 
@@ -492,7 +476,6 @@ fs_stub_create_file(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_CREATE, args);
     }
 
-    printf("create: %d\n", result);
     return result;
 }
 
@@ -523,7 +506,6 @@ fs_stub_open(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_OPEN, args);
     }
 
-    printf("open: %d, %d, file_handle=%lu\n", result, op_result, file_handle);
     return result;
 }
 
@@ -566,7 +548,6 @@ fs_stub_read(
         free(read_buffer);
     }
 
-    printf("read: %d\n", result);
     return result;
 }
 
@@ -601,7 +582,6 @@ fs_stub_write(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_WRITE, args);
     }
 
-    printf("write: %d, %d, handle=%lu\n", result, op_result, file_handle);
     return result;
 }
 
@@ -631,7 +611,6 @@ fs_stub_statfs(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_STATFS, args);
     }
 
-    printf("stafs: %d\n", result);
     return result;
 }
 
@@ -660,7 +639,6 @@ fs_stub_release_handle(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_RELEASE, args);
     }
 
-    printf("release: %d\n", result);
     return result;
 }
 
@@ -691,7 +669,6 @@ fs_stub_fsync(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_FSYNC, args);
     }
 
-    printf("fsync: %d\n", result);
     return result;
 }
 
@@ -724,7 +701,6 @@ fs_stub_lseek(
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_LSEEK, args);
     }
 
-    printf("lseek: %d\n", result);
     return result;
 }
 

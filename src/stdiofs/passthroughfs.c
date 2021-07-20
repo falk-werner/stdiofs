@@ -57,7 +57,6 @@ passthroughfs_getattr(
 {
     (void) file_handle;
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("getattr: path=%s\n", effective_path);
 
     int result = lstat(effective_path, buffer);
     if (-1 == result)
@@ -76,7 +75,6 @@ passthroughfs_access(
     int mask)
 {
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("access: path=%s, mask=0x%04x\n", effective_path, mask);
 
     int result = access(effective_path, mask);
     if (-1 == result)
@@ -96,7 +94,6 @@ passthroughfs_readlink(
     size_t buffer_size)
 {
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("readlink: path=%s\n", effective_path);
 
     int result = readlink(effective_path, buffer, buffer_size - 1);
     if (0 <= result)
@@ -127,7 +124,6 @@ passthroughfs_readdir(
     int result = 0;
 
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("readdir: path=%s\n", effective_path);
     DIR * dir = opendir(effective_path);
     if (NULL != dir)
     {
@@ -161,7 +157,6 @@ passthroughfs_mknod(
     dev_t rdev)
 {
    char * effective_path = passthroughfs_get_effective_path(user_data, path);
-   printf("mknod: path=%s\n", effective_path);
    int result = 0;
 
     if (S_ISREG(mode))
@@ -193,7 +188,6 @@ passthroughfs_mkdir(
     mode_t mode)
 {
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("mkdir: path=%s\n", effective_path);
 
     int result = mkdir(effective_path, mode);
     if (-1 == result)
@@ -211,7 +205,6 @@ passthroughfs_unlink(
     char const * path)
 {
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("unlink: path=%s\n", effective_path);
 
     int result = unlink(effective_path);
     if (-1 == result)
@@ -229,7 +222,6 @@ passthroughfs_rmdir(
     char const * path)
 {
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("rmdir: path=%s\n", effective_path);
 
     int result = rmdir(effective_path);
     if (-1 == result)
@@ -249,7 +241,6 @@ passthroughfs_symlink(
 {
     char * effective_from = ('/' == from[0]) ? passthroughfs_get_effective_path(user_data, from) : strdup(from);
     char * effective_to = ('/' == to[0]) ? passthroughfs_get_effective_path(user_data, to) : strdup(to);
-    printf("symlink: from=%s, to=%s\n", effective_from, effective_to);
 
     int result = symlink(effective_from, effective_to);
     if (-1 == result)
@@ -276,7 +267,6 @@ passthroughfs_rename(
 
     char * effective_from = ('/' == from[0]) ? passthroughfs_get_effective_path(user_data, from) : strdup(from);
     char * effective_to = ('/' == to[0]) ? passthroughfs_get_effective_path(user_data, to) : strdup(to);
-    printf("rename: from=%s, to=%s\n", effective_from, effective_to);
 
     int result = rename(effective_from, effective_to);
     if (-1 == result)
@@ -297,7 +287,6 @@ passthroughfs_link(
 {
     char * effective_from = ('/' == from[0]) ? passthroughfs_get_effective_path(user_data, from) : strdup(from);
     char * effective_to = ('/' == to[0]) ? passthroughfs_get_effective_path(user_data, to) : strdup(to);
-    printf("link: from=%s, to=%s\n", effective_from, effective_to);
 
     int result = link(effective_from, effective_to);
     if (-1 == result)
@@ -317,7 +306,6 @@ passthroughfs_chmod(
     mode_t mode)
 {
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("chmod: path=%s\n", effective_path);
 
     int result = chmod(effective_path, mode);
     if (-1 == result)
@@ -337,7 +325,6 @@ passthroughfs_chown(
     gid_t gid)
 {
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("chown: path=%s\n", effective_path);
 
     int result = lchown(effective_path, uid, gid);
     if (-1 == result)
@@ -357,7 +344,6 @@ passthroughfs_truncate(
     uint64_t file_handle)
 {
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("truncate: path=%s\n", effective_path);
 
     int result;
     if (FS_INVALID_HANDLE != file_handle)
@@ -387,7 +373,6 @@ passthroughfs_create_file(
     uint64_t * file_handle)
 {
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("create: path=%s\n", effective_path);
 
     int result = open(effective_path, flags, mode);
     if (-1 != result)
@@ -412,7 +397,6 @@ passthroughfs_open(
     uint64_t * file_handle)
 {
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("open: path=%s\n", effective_path);
 
     int result = open(effective_path, flags);
     if (-1 != result)
@@ -442,7 +426,6 @@ passthroughfs_read(
 
     if (FS_INVALID_HANDLE != file_handle)
     {
-        printf("read: fd=%ld\n", file_handle);
         result = pread(file_handle, buffer, buffer_size, offset);
         if (-1 == result)
         {
@@ -452,7 +435,6 @@ passthroughfs_read(
     else
     {
         char * effective_path = passthroughfs_get_effective_path(user_data, path);
-        printf("read: path=%s\n", effective_path);
         int fd = open(effective_path, O_RDONLY);
         if (0 <= fd)
         {
@@ -486,7 +468,6 @@ passthroughfs_write(
 
     if (FS_INVALID_HANDLE != file_handle)
     {
-        printf("write: fd=%ld\n", file_handle);
         result = pwrite(file_handle, buffer, buffer_size, offset);
         if (-1 == result)
         {
@@ -496,7 +477,6 @@ passthroughfs_write(
     else
     {
         char * effective_path = passthroughfs_get_effective_path(user_data, path);
-        printf("write: path=%s\n", effective_path);
         int fd = open(effective_path, O_RDONLY);
         if (0 <= fd)
         {
@@ -524,7 +504,6 @@ passthroughfs_statfs(
     struct statvfs * buffer)
 {
     char * effective_path = passthroughfs_get_effective_path(user_data, path);
-    printf("statfs: path=%s\n", effective_path);
 
     int result = statvfs(effective_path, buffer);
     if (-1 == result)
@@ -571,7 +550,6 @@ passthroughfs_lseek(
 
     if (FS_INVALID_HANDLE != file_handle)
     {
-        printf("lseek: fd=%ld\n", file_handle);
         result = lseek(file_handle, offset, whence);
         if (-1 == result)
         {
@@ -581,7 +559,6 @@ passthroughfs_lseek(
     else
     {
         char * effective_path = passthroughfs_get_effective_path(user_data, path);
-        printf("write: path=%s\n", effective_path);
         int fd = open(effective_path, O_RDONLY);
         if (0 <= fd)
         {
