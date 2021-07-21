@@ -28,6 +28,23 @@ fs_proxy_release(
     free(proxy);
 }
 
+int
+fs_proxy_listoperations(
+    struct fs_proxy * proxy,
+    void * buffer,
+    fs_stringlist_add_fn * add)
+{
+    int result = 0;
+    struct rpc_arg const args[] =
+    {
+        {"result"     , RPC_OUT, RPC_INT       , &result     , NULL},
+        {"operations" , RPC_OUT, RPC_STRINGLIST, buffer      , add },
+        {NULL         , RPC_END, RPC_NONE      , NULL        , NULL}
+    };
+
+    int rc = rpc_invoke(proxy->rpc, FS_METHOD_LISTOPERATIONS, args);
+    return rc;
+}
 
 int
 fs_proxy_getattr(
@@ -118,12 +135,12 @@ fs_proxy_readdir(
 
     struct rpc_arg const args[] =
     {
-        {"path"       , RPC_IN , RPC_STRING   , (void*) path, NULL},
-        {"offset"     , RPC_IN , RPC_OFFSET   , &offset     , NULL},
-        {"file_handle", RPC_IN , RPC_UINT64   , &file_handle, NULL},
-        {"result"     , RPC_OUT, RPC_INT      , &result     , NULL},
-        {"buffer"     , RPC_OUT, RPC_DIRBUFFER, buffer      , add },
-        {NULL         , RPC_END, RPC_NONE     , NULL        , NULL}
+        {"path"       , RPC_IN , RPC_STRING    , (void*) path, NULL},
+        {"offset"     , RPC_IN , RPC_OFFSET    , &offset     , NULL},
+        {"file_handle", RPC_IN , RPC_UINT64    , &file_handle, NULL},
+        {"result"     , RPC_OUT, RPC_INT       , &result     , NULL},
+        {"buffer"     , RPC_OUT, RPC_STRINGLIST, buffer      , add },
+        {NULL         , RPC_END, RPC_NONE      , NULL        , NULL}
     };
 
     int rc = rpc_invoke(proxy->rpc, FS_METHOD_READDIR, args);

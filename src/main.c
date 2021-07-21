@@ -30,7 +30,6 @@ stub_run(void * user_data)
         // loop
     }
 
-    puts("stop stub");
     fs_stub_release(stub);
     passthroughfs_release(fs);
     free(working_dir);
@@ -88,6 +87,5 @@ int main(int argc, char * argv[])
     rpc_release(rpc);
 
     pthread_join(stub_thread, NULL);
-    puts("finished");
     return result;
 }

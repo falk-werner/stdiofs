@@ -29,6 +29,60 @@ fs_stub_unknown_method(
     return -1;
 }
 
+static void
+fs_stub_addifset(
+    struct rpc_stringlist * list,
+    void * pointer,
+    char const * value)
+{
+    if (NULL != pointer)
+    {
+        rpc_stringlist_add(list, value);
+    }
+}
+
+static int
+fs_stub_listoperations(
+    struct fs_stub * stub,
+    struct rpc_buffer * buffer)
+{
+    struct rpc_stringlist list;
+    rpc_stringlist_init(&list);
+
+    fs_stub_addifset(&list, stub->operations.getattr , "getattr");
+    fs_stub_addifset(&list, stub->operations.access  , "access");
+    fs_stub_addifset(&list, stub->operations.readlink, "readlink");
+    fs_stub_addifset(&list, stub->operations.readdir , "readdir");
+    fs_stub_addifset(&list, stub->operations.mknod   , "mknod");
+    fs_stub_addifset(&list, stub->operations.mkdir   , "mkdir");
+    fs_stub_addifset(&list, stub->operations.symlink , "symlink");
+    fs_stub_addifset(&list, stub->operations.unlink  , "unlink");
+    fs_stub_addifset(&list, stub->operations.rmdir   , "rmdir");
+    fs_stub_addifset(&list, stub->operations.rename  , "rename");
+    fs_stub_addifset(&list, stub->operations.link    , "link");
+    fs_stub_addifset(&list, stub->operations.chmod   , "chmod");
+    fs_stub_addifset(&list, stub->operations.chown   , "chown");
+    fs_stub_addifset(&list, stub->operations.truncate, "truncate");
+    fs_stub_addifset(&list, stub->operations.create  , "create");
+    fs_stub_addifset(&list, stub->operations.open    , "open");
+    fs_stub_addifset(&list, stub->operations.read    , "read");
+    fs_stub_addifset(&list, stub->operations.write   , "write");
+    fs_stub_addifset(&list, stub->operations.statfs  , "statfs");
+    fs_stub_addifset(&list, stub->operations.release , "release");
+    fs_stub_addifset(&list, stub->operations.fsync   , "fsync");
+    fs_stub_addifset(&list, stub->operations.lseek   , "lseek");
+
+    int op_result = 0;
+    struct rpc_arg const args[] =
+    {
+        {"result"     , RPC_OUT, RPC_INT       , &op_result  , NULL},
+        {"operations" , RPC_OUT, RPC_STRINGLIST, &list, NULL},
+        {NULL         , RPC_END, RPC_NONE      , NULL        , NULL}
+    };
+
+    return rpc_serialize(buffer, RPC_OUT, FS_METHOD_LISTOPERATIONS, args);
+}
+
 static int
 fs_stub_getattr(
     struct fs_stub * stub,
@@ -135,29 +189,29 @@ fs_stub_readdir(
     uint64_t file_handle;
     int op_result;
 
-    struct rpc_dirbuffer dirbuffer;
-    rpc_dirbuffer_init(&dirbuffer);
+    struct rpc_stringlist list;
+    rpc_stringlist_init(&list);
 
     struct rpc_arg const args[] =
     {
-        {"path"       , RPC_IN , RPC_STRING   , &path       , NULL},
-        {"offset"     , RPC_IN , RPC_OFFSET   , &offset     , NULL},
-        {"file_handle", RPC_IN , RPC_UINT64   , &file_handle, NULL},
-        {"result"     , RPC_OUT, RPC_INT      , &op_result  , NULL},
-        {"buffer"     , RPC_OUT, RPC_DIRBUFFER, &dirbuffer  , NULL},
-        {NULL         , RPC_END, RPC_NONE     , NULL        , NULL}
+        {"path"       , RPC_IN , RPC_STRING    , &path       , NULL},
+        {"offset"     , RPC_IN , RPC_OFFSET    , &offset     , NULL},
+        {"file_handle", RPC_IN , RPC_UINT64    , &file_handle, NULL},
+        {"result"     , RPC_OUT, RPC_INT       , &op_result  , NULL},
+        {"buffer"     , RPC_OUT, RPC_STRINGLIST, &list       , NULL},
+        {NULL         , RPC_END, RPC_NONE      , NULL        , NULL}
     };
 
     int result = rpc_deserialize(buffer, RPC_IN, args);
     if (0 == result)
     {
         op_result = stub->operations.readdir(stub->user_data, 
-            path, &dirbuffer, &rpc_dirbuffer_add, offset, file_handle);
+            path, &list, &rpc_stringlist_add, offset, file_handle);
 
         result = rpc_serialize(buffer, RPC_OUT, FS_METHOD_READDIR, args);
     }
 
-    rpc_dirbuffer_cleanup(&dirbuffer);
+    rpc_stringlist_cleanup(&list);
     return result;
 }
 
@@ -711,6 +765,8 @@ fs_stub_get_operation(
 {
     switch (method_id)
     {
+        case FS_METHOD_LISTOPERATIONS:
+            return &fs_stub_listoperations;
         case FS_METHOD_GETATTR:
             return &fs_stub_getattr;
         case FS_METHOD_ACCESS:

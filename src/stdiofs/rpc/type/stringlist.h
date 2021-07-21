@@ -1,5 +1,5 @@
-#ifndef RPC_TYPE_DIRBUFFER_H
-#define RPC_TYPE_DIRBUFFER_H
+#ifndef RPC_TYPE_STRINGLIST_H
+#define RPC_TYPE_STRINGLIST_H
 
 #ifndef __cplusplus
 #include <stddef.h>
@@ -16,11 +16,11 @@ struct rpc_buffer;
 struct rpc_arg;
 
 typedef int
-rpc_dirbuffer_add_fn(
+rpc_stringlist_add_fn(
     void * buffer,
-    char const * name);
+    char const * value);
 
-struct rpc_dirbuffer
+struct rpc_stringlist
 {
     char * * entries;
     size_t size;
@@ -28,25 +28,25 @@ struct rpc_dirbuffer
 };
 
 extern void
-rpc_dirbuffer_init(
-    struct rpc_dirbuffer * buffer);
+rpc_stringlist_init(
+    struct rpc_stringlist * buffer);
 
 extern void
-rpc_dirbuffer_cleanup(
-    struct rpc_dirbuffer * buffer);
+rpc_stringlist_cleanup(
+    struct rpc_stringlist * buffer);
 
 extern int
-rpc_dirbuffer_add(
+rpc_stringlist_add(
     void * buffer,
     char const * name);
 
 extern int
-rpc_serialize_dirbuffer(
+rpc_serialize_stringlist(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
 
 extern int
-rpc_deserialize_dirbuffer(
+rpc_deserialize_stringlist(
     struct rpc_buffer * buffer,
     struct rpc_arg const * arg);
 

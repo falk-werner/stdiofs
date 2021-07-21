@@ -1,7 +1,7 @@
 #ifndef RPC_TYPES_H
 #define RPC_TYPES_H
 
-#include "stdiofs/rpc/type/dirbuffer.h"
+#include "stdiofs/rpc/type/stringlist.h"
 
 #ifndef __cplusplus
 #include <stddef.h>
@@ -31,9 +31,9 @@ extern "C"
 #define RPC_STRING  9
 #define RPC_BYTES  10
 
-#define RPC_STAT      11
-#define RPC_STATVFS   12
-#define RPC_DIRBUFFER 13
+#define RPC_STAT       11
+#define RPC_STATVFS    12
+#define RPC_STRINGLIST 13
 
 
 struct rpc_buffer;

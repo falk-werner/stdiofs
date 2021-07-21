@@ -7,10 +7,12 @@
 #include <fuse.h>
 
 #include <stdlib.h>
+#include <string.h>
 
 struct proxyfs
 {
     struct fs_proxy * proxy;
+    struct fuse_operations operations;
 };
 
 struct proxyfs_adddir_context
@@ -298,33 +300,106 @@ proxyfs_lseek(
     return fs_proxy_lseek(proxy, path, offset, whence, (NULL != info) ? info->fh : FS_INVALID_HANDLE);
 }
 
-
-static struct fuse_operations const g_proxyfs_operations =
+static int
+proxyfs_setoperation(
+    void * list,
+    char const * name)
 {
-    .init = proxyfs_init,
-    .getattr = proxyfs_getattr,
-    .access = proxyfs_access,
-    .readlink = proxyfs_readlink,
-    .readdir = proxyfs_readdir,
-    .mknod = proxyfs_mknod,
-    .mkdir = proxyfs_mkdir,
-    .unlink = proxyfs_unlink,
-    .rmdir = proxyfs_rmdir,
-    .symlink = proxyfs_symlink,
-    .rename = proxyfs_rename,
-    .link = proxyfs_link,
-    .chmod = proxyfs_chmod,
-    .chown = proxyfs_chown,
-    .truncate = proxyfs_truncate,
-    .create = proxyfs_create_file,
-    .open = proxyfs_open,
-    .read = proxyfs_read,
-    .write = proxyfs_write,
-    .statfs = proxyfs_statfs,
-    .release = proxyfs_release_handle,
-    .fsync = proxyfs_fsync,
-    .lseek = proxyfs_lseek
-};
+    struct fuse_operations * operations = list;
+
+    if (0 == strcmp(name, "init"))
+    {
+        operations->init = &proxyfs_init;
+    }
+    else if (0 == strcmp(name, "getattr"))
+    {
+        operations->getattr = &proxyfs_getattr;
+    }
+    else if (0 == strcmp(name, "access"))
+    {
+        operations->access = &proxyfs_access;
+    }
+    else if (0 == strcmp(name, "readlink"))
+    {
+        operations->readlink = proxyfs_readlink;
+    }
+    else if (0 == strcmp(name, "readdir"))
+    {
+        operations->readdir = &proxyfs_readdir;
+    }
+    else if (0 == strcmp(name, "mknod"))
+    {
+        operations->mknod = &proxyfs_mknod;
+    }
+    else if (0 == strcmp(name, "mkdir"))
+    {
+        operations->mkdir = &proxyfs_mkdir;
+    }
+    else if (0 == strcmp(name, "unlink"))
+    {
+        operations->unlink = &proxyfs_unlink;
+    }
+    else if (0 == strcmp(name, "rmdir"))
+    {
+        operations->rmdir = proxyfs_rmdir;
+    }
+    else if (0 == strcmp(name, "symlink"))
+    {
+        operations->symlink = &proxyfs_symlink;
+    }
+    else if (0 == strcmp(name, "rename"))
+    {
+        operations->rename = &proxyfs_rename;
+    }
+    else if (0 == strcmp(name, "link"))
+    {
+        operations->link = &proxyfs_link;
+    }
+    else if (0 == strcmp(name, "chmod"))
+    {
+        operations->chmod = &proxyfs_chmod;
+    }
+    else if (0 == strcmp(name, "chown"))
+    {
+        operations->chown = &proxyfs_chown;
+    }
+    else if (0 == strcmp(name, "truncate"))
+    {
+        operations->truncate = &proxyfs_truncate;
+    }
+    else if (0 == strcmp(name, "create"))
+    {
+        operations->create = &proxyfs_create_file;
+    }
+    else if (0 == strcmp(name, "open"))
+    {
+        operations->open = &proxyfs_open;
+    }
+    else if (0 == strcmp(name, "read"))
+    {
+        operations->read = &proxyfs_read;
+    }
+    else if (0 == strcmp(name, "write"))
+    {
+        operations->write = &proxyfs_write;
+    }
+    else if (0 == strcmp(name, "statfs"))
+    {
+        operations->statfs = &proxyfs_statfs;
+    }
+    else if (0 == strcmp(name, "release"))
+    {
+        operations->release = &proxyfs_release_handle;
+    }
+    else if (0 == strcmp(name, "fsync"))
+    {
+        operations->fsync = &proxyfs_fsync;
+    }
+    else if (0 == strcmp(name, "lseek"))
+    {
+        operations->lseek = &proxyfs_lseek;
+    }
+}
 
 struct proxyfs *
 proxyfs_create(
@@ -332,6 +407,7 @@ proxyfs_create(
 {
     struct proxyfs * fs = malloc(sizeof(struct proxyfs));
     fs->proxy = proxy;
+    memset(&fs->operations, 0, sizeof(struct fuse_operations));
 
     return fs;
 }
@@ -347,5 +423,17 @@ struct fuse_operations const *
 proxyfs_get_operations(
     struct proxyfs * fs)
 {
-    return &g_proxyfs_operations;
+    memset(&fs->operations, 0, sizeof(struct fuse_operations));
+    int result = fs_proxy_listoperations(fs->proxy, &fs->operations, 
+        proxyfs_setoperation);
+
+    if (0 == result)
+    {
+        return &fs->operations;
+    }
+    else
+    {
+        return NULL;
+    }
+
 }

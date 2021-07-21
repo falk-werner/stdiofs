@@ -2,6 +2,7 @@
 #define FS_PROXY_H
 
 #include "stdiofs/fs/dirbuffer.h"
+#include "stdiofs/fs/stringlist.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -33,6 +34,11 @@ extern void
 fs_proxy_release(
     struct fs_proxy * proxy);
 
+extern int
+fs_proxy_listoperations(
+    struct fs_proxy * proxy,
+    void * buffer,
+    fs_stringlist_add_fn * add);
 
 extern int
 fs_proxy_getattr(
