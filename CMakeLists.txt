@@ -40,10 +40,26 @@ target_include_directories(stdiofs PRIVATE src)
 target_link_libraries(stdiofs PUBLIC PkgConfig::FUSE)
 
 add_executable(stdiofs_main
-    src/main.c)
+    src/stdiofs/app/main.c)
 
+set_target_properties(stdiofs_main PROPERTIES OUTPUT_NAME stdiofs)
 target_include_directories(stdiofs_main PRIVATE src)
 target_link_libraries(stdiofs_main PRIVATE stdiofs)
+
+add_executable(stdiofs_provider
+    src/stdiofs/app/provider.c)
+
+target_include_directories(stdiofs_provider PRIVATE src)
+target_link_libraries(stdiofs_provider PRIVATE stdiofs)
+
+
+add_executable(stdiofs_demo
+    src/main.c)
+
+target_include_directories(stdiofs_demo PRIVATE src)
+target_link_libraries(stdiofs_demo PRIVATE stdiofs)
+
+
 
 if(NOT(WITHOUT_TEST))
 
