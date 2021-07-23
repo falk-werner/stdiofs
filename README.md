@@ -58,3 +58,6 @@ Technically, stdiofs can use every tunnel that provides communication via _stdin
 | WITHOUT_TESTS | bool | Disable build of unit tests |
 
 
+## Protocol 
+
+Stdiofs uses a [binary protocol](doc/protocol.md) which is communicated between _stdiofs provider_ and the _stdiofs_ process.
