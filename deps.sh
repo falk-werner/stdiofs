@@ -1,4 +1,4 @@
-PACKAGES="fuse3 jansson gtest"
+PACKAGES="fuse3 gtest"
 
 fuse3_VERSION=3.10.0
 fuse3_URL=https://github.com/libfuse/libfuse/archive/fuse-${fuse3_VERSION}.tar.gz
