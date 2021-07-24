@@ -46,12 +46,14 @@ add_executable(stdiofs_main
 set_target_properties(stdiofs_main PROPERTIES OUTPUT_NAME stdiofs)
 target_include_directories(stdiofs_main PRIVATE src)
 target_link_libraries(stdiofs_main PRIVATE stdiofs)
+install(TARGETS stdiofs_main RUNTIME)
 
 add_executable(stdiofs_provider
     src/stdiofs/app/provider.c)
 
 target_include_directories(stdiofs_provider PRIVATE src)
 target_link_libraries(stdiofs_provider PRIVATE stdiofs)
+install(TARGETS stdiofs_provider RUNTIME)
 
 
 if(NOT(WITHOUT_TEST))
