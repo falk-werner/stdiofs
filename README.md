@@ -53,9 +53,11 @@ Technically, stdiofs can use every tunnel that provides communication via _stdin
 
 ### Build Options
 
-| Option        | Type | Description                 |
-|---------------|------|-----------------------------|
-| WITHOUT_TESTS | bool | Disable build of unit tests |
+| Option           | Type | Description                      |
+|------------------|------|----------------------------------|
+| WITHOUT_TESTS    | bool | Disable build of unit tests      |
+| WITHOUT_STDIOFS  | bool | Disable build of stdiofs binary  |
+| WITHOUT_PROVIDER | bool | Disable build of provider binary |
 
 
 ## Protocol 

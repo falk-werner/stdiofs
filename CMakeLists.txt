@@ -1,15 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
-project(stdiofs)
+project(stdiofs VERSION 1.0.0)
 
-option(WITHOUT_TEST, "Build without tests" OFF)
+option(WITHOUT_TEST     "Build without tests"   OFF)
+option(WITHOUT_PROVIDER "Omit stdiofs provider" OFF)
+option(WITHOUT_STDIOFS  "Omit stdiofs binary"   OFF)
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(FUSE REQUIRED IMPORTED_TARGET fuse3)
 
 set(CMAKE_C_STANDARD 99)
 
+
 add_library(stdiofs STATIC
-    src/stdiofs/proxyfs.c
     src/stdiofs/fs/proxy.c
     src/stdiofs/fs/stub.c
     src/stdiofs/fs/stub_operations.c
@@ -38,40 +39,45 @@ add_library(stdiofs STATIC
 )
 
 target_include_directories(stdiofs PRIVATE src)
-target_link_libraries(stdiofs PUBLIC PkgConfig::FUSE)
 
-add_executable(stdiofs_main
-    src/stdiofs/app/main.c)
 
-set_target_properties(stdiofs_main PROPERTIES OUTPUT_NAME stdiofs)
-target_include_directories(stdiofs_main PRIVATE src)
-target_link_libraries(stdiofs_main PRIVATE stdiofs)
-install(TARGETS stdiofs_main RUNTIME)
+if(NOT(WITHOUT_STDIOFS))
+    pkg_check_modules(FUSE REQUIRED IMPORTED_TARGET fuse3)
 
-add_executable(stdiofs_provider
-    src/stdiofs/app/provider.c)
+    add_executable(stdiofs_main
+        src/stdiofs/app/main.c
+            src/stdiofs/proxyfs.c)
 
-target_include_directories(stdiofs_provider PRIVATE src)
-target_link_libraries(stdiofs_provider PRIVATE stdiofs)
-install(TARGETS stdiofs_provider RUNTIME)
+    set_target_properties(stdiofs_main PROPERTIES OUTPUT_NAME stdiofs)
+    target_include_directories(stdiofs_main PRIVATE src)
+    target_link_libraries(stdiofs_main PRIVATE stdiofs PkgConfig::FUSE)
+    install(TARGETS stdiofs_main RUNTIME)
+endif()
+
+
+if(NOT(WITHOUT_PROVIDER))
+    add_executable(stdiofs_provider
+        src/stdiofs/app/provider.c)
+
+    target_include_directories(stdiofs_provider PRIVATE src)
+    target_link_libraries(stdiofs_provider PRIVATE stdiofs)
+    install(TARGETS stdiofs_provider RUNTIME)
+endif()
 
 
 if(NOT(WITHOUT_TEST))
+    pkg_check_modules(GTEST REQUIRED IMPORTED_TARGET gtest_main)
 
-pkg_check_modules(GTEST REQUIRED IMPORTED_TARGET gtest_main)
+    add_executable(alltests
+        test/stdiofs/rpc/buffer.cpp
+        test/stdiofs/rpc/connection.cpp
+        test/stdiofs/rpc/serializer.cpp
+        test/stdiofs/rpc/deserializer.cpp
+        test/stdiofs/rpc/type/unknown.cpp
+        test/stdiofs/rpc/type/int.cpp
+        test/stdiofs/rpc/type/stringlist.cpp
+    )
 
-
-add_executable(alltests
-    test/stdiofs/rpc/buffer.cpp
-    test/stdiofs/rpc/connection.cpp
-    test/stdiofs/rpc/serializer.cpp
-    test/stdiofs/rpc/deserializer.cpp
-    test/stdiofs/rpc/type/unknown.cpp
-    test/stdiofs/rpc/type/int.cpp
-    test/stdiofs/rpc/type/stringlist.cpp
-)
-
-target_include_directories(alltests PRIVATE src test)
-target_link_libraries(alltests PRIVATE stdiofs PkgConfig::GTEST)
-
+    target_include_directories(alltests PRIVATE src test)
+    target_link_libraries(alltests PRIVATE stdiofs PkgConfig::GTEST)
 endif()
