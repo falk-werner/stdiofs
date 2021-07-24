@@ -63,3 +63,13 @@ Technically, stdiofs can use every tunnel that provides communication via _stdin
 ## Protocol 
 
 Stdiofs uses a [binary protocol](doc/protocol.md) which is communicated between _stdiofs provider_ and the _stdiofs_ process.
+
+## Quirks
+
+Since stdiofs uses _stdin_ and _stdout_ for communication, it does not make much sence to run it in daemon mode.
+Therefore, option _-f_ should be provided in most use cases.
+
+Since stdiofs uses a strict request-reply scheme, it does not make much sence to run it multithreaded.
+A mutex is used to enforce the communication scheme.
+Therefore, running stdiofs in multithreded mode does not lead to any errors, but wastes resources.
+Option _-s_ should be provided to run in single-threaded mode.
