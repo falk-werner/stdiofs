@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/falk-werner/stdiofs.svg?branch=main)](https://travis-ci.com/falk-werner/stdiofs)
+
 # stdiofs
 
 Inject a filesystem via stdio.
