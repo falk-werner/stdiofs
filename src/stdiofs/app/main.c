@@ -5,6 +5,7 @@
 #include "stdiofs/fs/proxy.h"
 #include "stdiofs/rpc/rpc.h"
 #include "stdiofs/rpc/connection.h"
+#include "stdiofs/util/connection_monitor.h"
 
 #include <fuse.h>
 
@@ -15,6 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <signal.h>
 
 static void
 check_args(int argc, char * argv[])
@@ -50,6 +52,8 @@ check_args(int argc, char * argv[])
     }
 }
 
+static pthread_t main_thread;
+
 static void
 on_connection_error(
     void * user_data)
@@ -60,11 +64,16 @@ on_connection_error(
     {
         fuse_exit(context->fuse);
     }
+    else
+    {
+        pthread_kill(main_thread, SIGINT);
+    }
 }
 
 int main(int argc, char * argv[])
 {
     check_args(argc, argv);
+    main_thread = pthread_self();
 
     struct rpc_connection proxy_connection;
     rpc_connection_init(&proxy_connection, STDIN_FILENO, STDOUT_FILENO, 0);
@@ -73,6 +82,8 @@ int main(int argc, char * argv[])
     struct rpc * rpc = rpc_create(&proxy_connection);
     struct fs_proxy * proxy = fs_proxy_create(rpc);
     struct proxyfs * proxyfs = proxyfs_create(proxy);
+
+    cmon_monitor(STDIN_FILENO, STDOUT_FILENO, &on_connection_error, NULL);
 
     umask(0);
     int result = fuse_main(argc, argv, proxyfs_get_operations(proxyfs), proxyfs);

@@ -34,6 +34,7 @@ add_library(stdiofs STATIC
     src/stdiofs/rpc/type/uid.c
     src/stdiofs/rpc/type/gid.c
     src/stdiofs/rpc/type/bytes.c
+    src/stdiofs/util/connection_monitor.c
 )
 
 target_include_directories(stdiofs PRIVATE src)
