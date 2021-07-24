@@ -54,14 +54,6 @@ target_include_directories(stdiofs_provider PRIVATE src)
 target_link_libraries(stdiofs_provider PRIVATE stdiofs)
 
 
-add_executable(stdiofs_demo
-    src/main.c)
-
-target_include_directories(stdiofs_demo PRIVATE src)
-target_link_libraries(stdiofs_demo PRIVATE stdiofs)
-
-
-
 if(NOT(WITHOUT_TEST))
 
 pkg_check_modules(GTEST REQUIRED IMPORTED_TARGET gtest_main)
@@ -81,5 +73,3 @@ target_include_directories(alltests PRIVATE src test)
 target_link_libraries(alltests PRIVATE stdiofs PkgConfig::GTEST)
 
 endif()
-
-add_executable(statvfs  util/statvfs.c)
