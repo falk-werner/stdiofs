@@ -6,6 +6,10 @@ extern "C"
 {
 #endif
 
+typedef void
+rpc_connection_onerror_fn(
+    void * user_data);
+
 struct rpc_buffer;
 
 struct rpc_connection
@@ -13,6 +17,8 @@ struct rpc_connection
     int read_fd;
     int write_fd;
     int close_on_cleanup;
+    rpc_connection_onerror_fn * onerror;
+    void * user_data;
 };
 
 extern void
@@ -36,6 +42,12 @@ extern int
 rpc_connection_read(
     struct rpc_connection * connection,
     struct rpc_buffer * buffer);
+
+extern void
+rpc_connection_set_onerror(
+    struct rpc_connection * connection,
+    rpc_connection_onerror_fn * onerror,
+    void * user_data);
 
 #ifdef __cplusplus
 }

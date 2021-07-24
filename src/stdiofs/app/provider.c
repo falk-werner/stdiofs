@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <signal.h>
 
 struct context
 {
@@ -24,6 +25,16 @@ struct context
     int result;
     bool show_help;
 };
+
+static struct rpc_connection connection;
+
+
+static void
+on_shutdown_requested(int signal_number)
+{
+    (void) signal_number;
+    rpc_connection_cleanup(&connection);
+}
 
 static void
 print_usage(void)
@@ -147,8 +158,10 @@ run(
 		close(stdin_pipes[0]);
 		close(stdout_pipes[1]);
 
-        struct rpc_connection connection;
         rpc_connection_init(&connection, stdout_pipes[0], stdin_pipes[1], 1);
+        signal(SIGINT, &on_shutdown_requested);
+        signal(SIGTERM, &on_shutdown_requested);
+        signal(SIGPIPE, SIG_IGN);
 
         struct passthroughfs * fs = passthroughfs_create(ctx->path);
         struct fs_stub * stub = fs_stub_create(&connection, passthroughfs_get_operations(fs), fs);

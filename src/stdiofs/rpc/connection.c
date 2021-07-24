@@ -55,6 +55,8 @@ rpc_connection_init(
     connection->read_fd  = read_fd;
     connection->write_fd = write_fd;
     connection->close_on_cleanup = close_on_cleanup;
+    connection->onerror = NULL;
+    connection->user_data = NULL;
 }
 
 void
@@ -96,6 +98,10 @@ rpc_connection_write(
         }
     }
 
+    if ((0 != result) && (NULL != connection->onerror))
+    {
+        connection->onerror(connection->user_data);
+    }
     return result;
 }
 
@@ -135,5 +141,19 @@ rpc_connection_read(
 
     }
 
+    if ((0 != result) && (NULL != connection->onerror))
+    {
+        connection->onerror(connection->user_data);
+    }
     return result;
+}
+
+void
+rpc_connection_set_onerror(
+    struct rpc_connection * connection,
+    rpc_connection_onerror_fn * onerror,
+    void * user_data)
+{
+    connection->onerror = onerror;
+    connection->user_data = user_data;
 }

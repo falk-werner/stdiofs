@@ -50,12 +50,25 @@ check_args(int argc, char * argv[])
     }
 }
 
+static void
+on_connection_error(
+    void * user_data)
+{
+    (void) user_data;
+    struct fuse_context * context = fuse_get_context();
+    if (NULL != context)
+    {
+        fuse_exit(context->fuse);
+    }
+}
+
 int main(int argc, char * argv[])
 {
     check_args(argc, argv);
 
     struct rpc_connection proxy_connection;
     rpc_connection_init(&proxy_connection, STDIN_FILENO, STDOUT_FILENO, 0);
+    rpc_connection_set_onerror(&proxy_connection, &on_connection_error, NULL);
 
     struct rpc * rpc = rpc_create(&proxy_connection);
     struct fs_proxy * proxy = fs_proxy_create(rpc);
