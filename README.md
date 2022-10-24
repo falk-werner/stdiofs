@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/falk-werner/stdiofs.svg?branch=main)](https://travis-ci.com/falk-werner/stdiofs)
+[![build](https://github.com/falk-werner/stdiofs/actions/workflows/build.yml/badge.svg)](https://github.com/falk-werner/stdiofs/actions/workflows/build.yml)
 
 # stdiofs
 
