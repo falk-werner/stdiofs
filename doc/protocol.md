@@ -195,7 +195,7 @@ Query file statistics.
 | path        | string    | request   | path of file system element |
 | file_handle | u64       | request   | file handle                 |
 | result      | int       | reply     | operation result            |
-| statistics  | stat      | replay    | statistics of the file      |
+| statistics  | stat      | reply    | statistics of the file      |
 
 __Note__: _file handle_ handle might be INVALID_HANDLE.
 
