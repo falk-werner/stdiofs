@@ -288,6 +288,8 @@ proxyfs_fsync(
     return fs_proxy_fsync(proxy, path, isdatasync, info->fh);
 }
 
+// lseek was added in libfuse 3.8
+#if FUSE_MINOR_VERSION >= 8
 static off_t
 proxyfs_lseek(
     char const * path,
@@ -299,6 +301,7 @@ proxyfs_lseek(
 
     return fs_proxy_lseek(proxy, path, offset, whence, (NULL != info) ? info->fh : FS_INVALID_HANDLE);
 }
+#endif
 
 static int
 proxyfs_setoperation(
@@ -395,10 +398,13 @@ proxyfs_setoperation(
     {
         operations->fsync = &proxyfs_fsync;
     }
+// lseek was added in libfuse 3.8
+#if FUSE_MINOR_VERSION >= 8
     else if (0 == strcmp(name, "lseek"))
     {
         operations->lseek = &proxyfs_lseek;
     }
+#endif
 }
 
 struct proxyfs *
