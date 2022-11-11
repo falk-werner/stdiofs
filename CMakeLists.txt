@@ -51,7 +51,7 @@ if(NOT(WITHOUT_STDIOFS))
     set_target_properties(stdiofs_main PROPERTIES OUTPUT_NAME stdiofs)
     target_include_directories(stdiofs_main PRIVATE src)
     target_link_libraries(stdiofs_main PRIVATE stdiofs PkgConfig::FUSE)
-    install(TARGETS stdiofs_main RUNTIME)
+    install(TARGETS stdiofs_main RUNTIME DESTINATION bin)
 endif()
 
 
