@@ -1,0 +1,9 @@
+## SECTION=disk_and_file
+
+config STDIOFS
+	bool
+	prompt "stdiofs"
+	select HOST_CMAKE
+	select FUSE3
+	help
+	  FIXME
