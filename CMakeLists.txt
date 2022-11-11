@@ -61,7 +61,7 @@ if(NOT(WITHOUT_PROVIDER))
 
     target_include_directories(stdiofs_provider PRIVATE src)
     target_link_libraries(stdiofs_provider PRIVATE stdiofs)
-    install(TARGETS stdiofs_provider RUNTIME)
+    install(TARGETS stdiofs_provider RUNTIME DESTINATION bin)
 endif()
 
 
