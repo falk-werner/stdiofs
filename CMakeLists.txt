@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(stdiofs VERSION 1.0.0)
+project(stdiofs VERSION 1.1.0)
 
 option(WITHOUT_TEST     "Build without tests"   OFF)
 option(WITHOUT_PROVIDER "Omit stdiofs provider" OFF)
@@ -51,7 +51,7 @@ if(NOT(WITHOUT_STDIOFS))
     set_target_properties(stdiofs_main PROPERTIES OUTPUT_NAME stdiofs)
     target_include_directories(stdiofs_main PRIVATE src)
     target_link_libraries(stdiofs_main PRIVATE stdiofs PkgConfig::FUSE)
-    install(TARGETS stdiofs_main RUNTIME)
+    install(TARGETS stdiofs_main RUNTIME DESTINATION bin)
 endif()
 
 
@@ -61,7 +61,7 @@ if(NOT(WITHOUT_PROVIDER))
 
     target_include_directories(stdiofs_provider PRIVATE src)
     target_link_libraries(stdiofs_provider PRIVATE stdiofs)
-    install(TARGETS stdiofs_provider RUNTIME)
+    install(TARGETS stdiofs_provider RUNTIME DESTINATION bin)
 endif()
 
 
